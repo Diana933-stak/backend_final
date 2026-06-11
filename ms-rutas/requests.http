@@ -1,0 +1,24 @@
+@baseUrl = http://127.0.0.1:8004
+@token = REEMPLAZAR_TOKEN
+
+### Listar rutas
+GET {{baseUrl}}/api/rutas
+Authorization: Bearer {{token}}
+
+### Crear ruta
+POST {{baseUrl}}/api/rutas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"ciudad_origen":"Bogota","ciudad_destino":"Cali","distancia":460,"tiempo_estimado":"10 horas"}
+
+### Programar viaje
+POST {{baseUrl}}/api/programaciones-viajes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"conductor_id":1,"vehiculo_id":1,"ruta_id":1,"fecha_salida":"2026-07-01","hora_salida":"08:00","fecha_estimada_llegada":"2026-07-02"}
+
+### Filtrar programaciones
+GET {{baseUrl}}/api/programaciones-viajes?conductor_id=1&fecha=2026-07-01&estado=programado
+Authorization: Bearer {{token}}
