@@ -1,0 +1,39 @@
+@baseUrl = http://127.0.0.1:8005
+@token = REEMPLAZAR_TOKEN
+@programacionId = 1
+
+### Iniciar
+POST {{baseUrl}}/api/viajes/{{programacionId}}/iniciar
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"novedad":"Salida desde el centro logistico"}
+
+### Registrar novedad
+POST {{baseUrl}}/api/viajes/{{programacionId}}/novedades
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"novedad":"Trafico lento en la via"}
+
+### Marcar retraso
+PATCH {{baseUrl}}/api/viajes/{{programacionId}}/estado
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"estado":"retrasado","novedad":"Retraso por cierre vial"}
+
+### Finalizar
+POST {{baseUrl}}/api/viajes/{{programacionId}}/finalizar
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"novedad":"Carga entregada"}
+
+### Seguimiento
+GET {{baseUrl}}/api/viajes/{{programacionId}}/seguimiento
+Authorization: Bearer {{token}}
+
+### Historial
+GET {{baseUrl}}/api/viajes/historial
+Authorization: Bearer {{token}}

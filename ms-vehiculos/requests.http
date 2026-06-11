@@ -1,0 +1,23 @@
+@baseUrl = http://127.0.0.1:8003
+@token = REEMPLAZAR_TOKEN
+
+### Listar
+GET {{baseUrl}}/api/vehiculos
+Authorization: Bearer {{token}}
+
+### Crear
+POST {{baseUrl}}/api/vehiculos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "placa": "ABC123",
+  "tipo_vehiculo": "Camion",
+  "capacidad_carga": 12000,
+  "modelo": "2025",
+  "marca": "International"
+}
+
+### Buscar placa
+GET {{baseUrl}}/api/vehiculos/placa/ABC123
+Authorization: Bearer {{token}}

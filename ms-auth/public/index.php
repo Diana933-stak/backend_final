@@ -1,15 +1,44 @@
 <?php
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Factory\AppFactory;
 
-require __DIR__ . '/../vendor/autoload.php';
+declare(strict_types=1);
+
+use App\Config\Database;
+use App\Middleware\CorsMiddleware;
+use App\Support\ApiResponse;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Exception\HttpNotFoundException;
+use Slim\Factory\AppFactory;
+use Slim\Psr7\Response;
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+$root = dirname(__DIR__);
+
+date_default_timezone_set('America/Bogota');
+Database::boot();
 
 $app = AppFactory::create();
+$app->addBodyParsingMiddleware();
+$app->addRoutingMiddleware();
+$app->add(CorsMiddleware::class);
 
-$app->get('/', function (Request $request, Response $response, $args) {
-    $response->getBody()->write("Hello world!");
-    return $response;
+$app->options('/{routes:.*}', static fn (ServerRequestInterface $request, Response $response): Response => $response);
+$app->get('/', static fn (ServerRequestInterface $request, Response $response) => ApiResponse::success(
+    $response,
+    ['service' => 'ms-auth'],
+    'Microservicio de autenticacion activo'
+));
+
+(require $root . '/app/Routes/api.php')($app);
+
+$errorMiddleware = $app->addErrorMiddleware(false, true, true);
+$errorMiddleware->setDefaultErrorHandler(static function (
+    ServerRequestInterface $request,
+    \Throwable $exception
+) {
+    $status = $exception instanceof HttpNotFoundException ? 404 : 500;
+    $message = $status === 404 ? 'Endpoint no encontrado' : 'Error interno del servidor';
+    return ApiResponse::error(new Response(), $message, $status);
 });
 
 $app->run();

@@ -1,0 +1,19 @@
+@baseUrl = http://127.0.0.1:8001
+@token = REEMPLAZAR_TOKEN
+
+### Iniciar sesion
+POST {{baseUrl}}/api/login
+Content-Type: application/json
+
+{
+  "identificador": "admin",
+  "contrasena": "admin123"
+}
+
+### Validar sesion
+GET {{baseUrl}}/api/validar-sesion
+Authorization: Bearer {{token}}
+
+### Cerrar sesion
+POST {{baseUrl}}/api/logout
+Authorization: Bearer {{token}}
